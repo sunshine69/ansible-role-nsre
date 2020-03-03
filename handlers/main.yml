@@ -1,0 +1,8 @@
+- name: reload systemd
+  command: "systemctl daemon-reload"
+
+- name: restart nsre
+  service:
+    name: nsre
+    state: restarted
+    enable: yes

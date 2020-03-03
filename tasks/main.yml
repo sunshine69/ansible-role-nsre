@@ -1,0 +1,6 @@
+- name: Assert nsre_install_dir exist
+  file:
+    path: '{{ nsre_install_dir }}'
+    state: directory
+
+- include_tasks: "{{ ansible_os_family }}.yml"

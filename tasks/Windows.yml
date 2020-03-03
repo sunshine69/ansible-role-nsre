@@ -1,0 +1,35 @@
+- name: Download the nsre binary
+  win_get_url:
+    force: yes
+    url: '{{ nsre_fetch_binary_url }}'
+    dest: '{{ nsre_install_dir }}/{{ nsre_binary_name }}'
+
+- name: Templating the nsre config file
+  win_template:
+    src: 'nsre.yaml.j2'
+    dest: '{{ nsre_install_dir }}/nsre.yaml'
+
+#- name: Download the nssm service manager
+#  win_get_url:
+#    url: "https://xvt-public-repo.s3-ap-southeast-2.amazonaws.com/pub/devops/nssm-2.24.zip"
+#    dest: '{{ nsre_install_dir }}/nssm-2.24.zip'
+#
+#- name: Extract nssm
+#  win_unzip:
+#    src: '{{ nsre_install_dir }}/nssm-2.24.zip'
+#    dest: '{{ nsre_install_dir }}'
+
+- name: Install nssm service manager https://nssm.cc/description
+  win_chocolatey:
+    name: nssm
+    state: present
+
+- name: Create nsre service
+  win_shell: |
+    nssm install nsre '{{ nsre_install_dir }}\{{ nsre_binary_name }}' -c '{{ nsre_install_dir }}\nsre.yaml' {{ nsre_command_options }}
+    nssm set nsre AppDirectory '{{ nsre_install_dir }}'
+    exit $LASTEXITCODE
+
+- name: Start nsre service
+  win_shell: nssm start nsre
+

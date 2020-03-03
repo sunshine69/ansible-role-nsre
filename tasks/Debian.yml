@@ -1,0 +1,27 @@
+- name: Download the nsre binary
+  get_url:
+    force: yes
+    url: "{{ nsre_fetch_binary_url }}"
+    dest: "{{ nsre_install_dir }}/{{ nsre_binary_name }}"
+    backup: yes
+    mode: u=rwx,g=rx,o=rx
+    owner: root
+    group: root
+
+- name: Templating the nsre config file
+  template:
+    src: "nsre.yaml.j2"
+    dest: "{{ nsre_install_dir }}/nsre.yaml"
+
+- name: Templating the startup script
+  template:
+    src: "nsre-linux.sh"
+    dest: "{{ nsre_install_dir }}/nsre.sh"
+
+- name: Templating systemd unit file
+  template:
+    src: "nsre.service.j2"
+    dest: "/etc/systemd/system/nsre.service"
+  notify:
+    - reload systemd
+    - restart nsre

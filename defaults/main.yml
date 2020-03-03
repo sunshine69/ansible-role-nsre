@@ -1,0 +1,47 @@
+nsre_fetch_binary_name: "{{ 'nsre.exe' if ansible_os_family == 'Windows' else 'nsre-linux-amd64-static' }}"
+nsre_fetch_binary_url: "https://xvt-public-repo.s3-ap-southeast-2.amazonaws.com/pub/devops/{{ nsre_fetch_binary_name }}"
+nsre_binary_name: "{{ 'nsre.exe' if ansible_os_family == 'Windows' else 'nsre' }}"
+
+nsre_install_dir: "{{ 'c:\\ansible_install\\nsre' if ansible_os_family == 'Windows' else '/var/nsre' }}"
+
+# nsre options. Run nsre -h for details. We always already have '-c nsre.yaml' in addition to this.
+# Example below is run a tail log to ship log to the remote nsre server
+nsre_command_options: "-m tail -tailf {{ '-poll' if ansible_os_family == 'Windows' else '' }}"
+
+nsre_commands:
+  - name: ping
+    path: /bin/echo pong
+nsre_logfiles:
+  - name: syslog
+    paths:
+      - /var/log/syslog
+      - /var/log/auth.log
+      - /var/log/kern.log
+      - /var/log/mail.log
+    timelayout: "Jan 02 15:04:05 2006 MST"
+    timepattern: '^([a-zA-Z]{3,3}[\s]+[\d]{0,2}[\s]+[\d]{2,2}\:[\d]{2,2}\:[\d]{2,2}) '
+    timeadjust: "2020 MST "
+    pattern: '([^\s]+) ([^\s]+) (.*)$'
+    multilineptn: '([^\s]+.*)$'
+    appname: ""
+
+nsre_passwordfilterpatterns:
+  - ([Pp]assword|[Pp]assphrase)['"]*[\:\=]*[\s\n]*[^\s]+[\s;]
+  - '(COMMAND=\/usr\/local\/ansible_install\/[^\/]+\/scripts\/[^\s]+ [^\s]+ [^\s]+ [^\s]+) .*$'
+
+nsre_authorizeddomain:
+  authorizeddomain:
+    somedomain.com.au: true
+    other.com: false
+
+# example
+nsre_awslogs: []
+  #- loggroupname: '/aws/ecs/uat'
+  #  streamprefix:
+  #  - 'api'
+  #  - 'errcd-wa-uat'
+  #  - 'xvt-report-pdf'
+  #  filterptn: ''
+  #  profile: 'cloudwatch_reader'
+  #  region:
+  #  period: '5m'
