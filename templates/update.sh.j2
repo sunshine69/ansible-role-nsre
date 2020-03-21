@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Quick refreshed nsre binarry
+
+export SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+cd $SCRIPT_DIR
+
+systemctl stop nsre
+wget {{ nsre_fetch_binary_url }} -O nsre
+chmod +x nsre
+sleep 3
+systemctl start nsre

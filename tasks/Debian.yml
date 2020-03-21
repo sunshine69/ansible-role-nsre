@@ -15,8 +15,15 @@
 
 - name: Templating the startup script
   template:
-    src: "nsre-linux.sh"
+    src: "nsre-linux.sh.j2"
     dest: "{{ nsre_install_dir }}/nsre.sh"
+    mode: 0750
+
+- name: Templating the update script
+  template:
+    src: "update.sh.j2"
+    dest: "{{ nsre_install_dir }}/update.sh"
+    mode: 0750
 
 - name: Templating systemd unit file
   template:
