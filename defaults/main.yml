@@ -1,5 +1,5 @@
 nsre_fetch_binary_name: "{{ 'nsre.exe' if ansible_os_family == 'Windows' else 'nsre-linux-amd64-static' }}"
-nsre_fetch_binary_url: "https://xvt-public-repo.s3-ap-southeast-2.amazonaws.com/pub/devops/{{ nsre_fetch_binary_name }}"
+nsre_fetch_binary_url: "https://act2-prod-infra-build.s3-ap-southeast-2.amazonaws.com/pub/devops/{{ nsre_fetch_binary_name }}"
 nsre_binary_name: "{{ 'nsre.exe' if ansible_os_family == 'Windows' else 'nsre' }}"
 
 nsre_install_dir: "{{ 'c:\\ansible_install\\nsre' if ansible_os_family == 'Windows' else '/var/nsre' }}"
@@ -45,3 +45,5 @@ nsre_awslogs: []
   #  profile: 'cloudwatch_reader'
   #  region:
   #  period: '5m'
+
+# See more in template folder complete vars

@@ -27,3 +27,6 @@ sessionkey: "{{ nsre_sessionkey }}"
 {{ nsre_authorizeddomain }}
 
 awslogs: "{{ nsre_awslogs }}"
+
+nsre_letsencryptenabled: {{ nsre_letsencryptenabled|default(false) }}
+nsre_letsencryptemail: {{ nsre_letsencryptemail|default('someone@somedomain') }}
