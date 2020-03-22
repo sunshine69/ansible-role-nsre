@@ -11,6 +11,7 @@ nsre_command_options: "-m tail -tailf {{ '-poll' if ansible_os_family == 'Window
 nsre_commands:
   - name: ping
     path: /bin/echo pong
+
 nsre_logfiles:
   - name: syslog
     paths:
@@ -25,16 +26,16 @@ nsre_logfiles:
     multilineptn: '([^\s]+.*)$'
     appname: ""
 
-nsre_passwordfilterpatterns:
-  - ([Pp]assword|[Pp]assphrase)['"]*[\:\=]*[\s\n]*[^\s]+[\s;]
-  - '(COMMAND=\/usr\/local\/ansible_install\/[^\/]+\/scripts\/[^\s]+ [^\s]+ [^\s]+ [^\s]+) .*$'
+nsre_password_filter_patterns:
+    - ([Pp]assword|[Pp]assphrase)['"]*[\:\=]*[\s\n]*[^\s]+[\s;]
+    - '(COMMAND=\/usr\/local\/ansible_install\/[^\/]+\/scripts\/[^\s]+ [^\s]+ [^\s]+ [^\s]+) .*$'
 
-nsre_authorizeddomain:
-  authorizeddomain:
+# google email with these domain will be allowed to login.
+# To allow explicit email see nsre doc.
+nsre_authorized_domain:
     somedomain.com.au: true
     other.com: false
 
-# example
 nsre_awslogs: []
   #- loggroupname: '/aws/ecs/uat'
   #  streamprefix:
@@ -46,4 +47,36 @@ nsre_awslogs: []
   #  region:
   #  period: '5m'
 
-# See more in template folder complete vars
+nsre_config:
+  port: "{{ nsre_port|default(8000) }}"
+  serverdomain: "{{ nsre_serverdomain|default('localhost') }}"
+
+  # Used in client mode to send to the server
+  serverurl: "{{ nsre_serverurl|default('http://localhost:8000') }}"
+  jwtkey: "{{ nsre_jwtkey|default('Change-It-InYour-ProductionSystem') }}"
+  sslcert: "{{ nsre_sslcert|default('') }}"
+  sslkey: "{{ nsre_sslkey|default('') }}"
+
+  logdbpath: "{{ nsre_dbpath|default('logs.db') }}"
+  logretention: "{{ nsre_logretention|default('90d') }}"
+
+  # commands list to allow remote execution.
+  commands: "{{ nsre_commands }}"
+
+  logfiles: "{{ nsre_logfiles }}"
+
+  passwordfilterpatterns: "{{ nsre_password_filter_patterns }}"
+
+  dbtimeout: "{{ nsre_dbtimeout|default('45s') }}"
+
+  appgoogleclientid: "{{ nsre_appgoogleclientid|default('') }}"
+  appgoogleclientsecret: "{{ nsre_appgoogleclientsecret|default('') }}"
+
+  sessionkey: "{{ nsre_sessionkey }}"
+
+  authorizeddomain: "{{ nsre_authorized_domain }}"
+
+  awslogs: "{{ nsre_awslogs }}"
+
+  nsre_letsencryptenabled: "{{ nsre_letsencryptenabled|default(false) }}"
+  nsre_letsencryptemail: "{{ nsre_letsencryptemail|default('someone@somedomain') }}"

@@ -1,8 +1,10 @@
 - name: reload systemd
   command: "systemctl daemon-reload"
 
+# tired of buggy ansible service module - for RedHat got error
+# fatal: [10.14.9.200]: FAILED! => {"changed": false, "msg": "Unsupported parameters for (systemd) module: enable Supported parameters include: daemon_reexec, daemon_reload, enabled, force, masked, name, no_block, scope, state, user"}
+
 - name: restart nsre
-  service:
-    name: nsre
-    state: restarted
-    enable: yes
+  shell: |
+    systemctl enable nsre
+    systemctl restart nsre
