@@ -8,6 +8,8 @@ nsre_install_dir: "{{ 'c:\\ansible_install\\nsre' if ansible_os_family == 'Windo
 # Example below is run a tail log to ship log to the remote nsre server
 nsre_command_options: "-m tail -tailf {{ '-poll' if ansible_os_family == 'Windows' else '' }}"
 
+nsre_port: 8000
+
 nsre_commands:
   - name: ping
     path: /bin/echo pong
@@ -48,7 +50,7 @@ nsre_awslogs: []
   #  period: '5m'
 
 nsre_config:
-  port: "{{ nsre_port|default(8000) }}"
+  port: "{{ nsre_port }}"
   serverdomain: "{{ nsre_serverdomain|default('localhost') }}"
 
   # Used in client mode to send to the server
